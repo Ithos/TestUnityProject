@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{7BFBAF65-BEBC-F1DC-A018-C48E81A13049}</ProjectGuid>
+	<ProjectGuid>{D4FBC9A4-3CD9-27A1-81D3-E604DE5C7339}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -47,6 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Camera\ThirdPersonCamera.cs" />
+     <Compile Include="Assets\Scripts\Movement\Movement.cs" />
+     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
      <None Include="Assets\Shaders\SkyboxBlended.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
