@@ -9,7 +9,7 @@ public class PlayerMovement : Movement {
     public string jumpButton = string.Empty;
     public string boostButton = string.Empty;
 
-    public float energyCostPerSec = 30;
+    public float energyCostPerSec = 50;
 
     private float _energy = 0;
 
@@ -117,14 +117,31 @@ public class PlayerMovement : Movement {
         {
             if (Input.GetButtonDown(boostButton) && _energy > 0)
             {
-                _energy -= energyCostPerSec * Time.deltaTime;
-                if (_energy < 0) _energy = 0;
-
                 SetRun(true);
             }
             else if (Input.GetButtonUp(boostButton))
             {
                 SetRun(false);
+            }
+
+            if (_run)
+            {
+                if (!_controller.isGrounded)
+                {
+                    _movementDirection = Vector3.zero;
+                    Walk();
+                    // Boost keeps momentum while in air if this is uncommented
+                    //_lastDirection.x = _movementDirection.x;
+                    //_lastDirection.z = _movementDirection.z;
+                    _myCollisionFlags = _controller.Move(_movementDirection * Time.deltaTime);
+                }
+
+                _energy -= energyCostPerSec * Time.deltaTime;
+                if (_energy < 0)
+                {
+                    _energy = 0;
+                    SetRun(false);
+                }
             }
         }
     }

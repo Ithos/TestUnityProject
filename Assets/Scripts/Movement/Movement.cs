@@ -230,7 +230,7 @@ public class Movement : MonoBehaviour {
         return false;
     }
 
-    private bool Walk()
+    protected bool Walk()
     {
         int vert = (int)_forward;
 
@@ -280,7 +280,7 @@ public class Movement : MonoBehaviour {
         return false;
     }
 
-    private bool Strafe()
+    protected bool Strafe()
     {
         int strafe = (int)_strafe;
 
@@ -300,7 +300,7 @@ public class Movement : MonoBehaviour {
         return false;
     }
 
-    public bool Jump()
+    protected bool Jump()
     {
         int jump = _jump ? 1 : 0;
 
@@ -316,13 +316,13 @@ public class Movement : MonoBehaviour {
         return false;
     }
 
-    public void Fall()
+    protected void Fall()
     {
         if(fallAnimation != null)
             animation.CrossFade(fallAnimation.name);
     }
 
-    public void Idle()
+    protected void Idle()
     {
         if (!checkSwimming(swimAnimation))
         {
