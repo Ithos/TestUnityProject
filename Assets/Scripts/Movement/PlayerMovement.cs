@@ -158,9 +158,10 @@ public class PlayerMovement : Movement {
             {
                 if (!_controller.isGrounded)
                 {
-                    float deccel = runSpeed / airDeccelTime;
+                    float curVel = _lastDirection.magnitude;
+                    float deccel = (curVel - moveSpeed) / airDeccelTime;
 
-                    if (Mathf.Abs(_lastDirection.magnitude) > moveSpeed)
+                    if (Mathf.Abs(curVel) > moveSpeed)
                     {
                         Vector3 tmp = _lastDirection - _lastDirection.normalized * deccel * Time.deltaTime;
 
