@@ -11,6 +11,10 @@ public class PlayerMovement : Movement {
 
     public float energyCostPerSec = 50;
 
+    public float airDeccelTime = 0.2f;
+
+    public bool lockTurnWithMove = false;
+
     private float _energy = 0;
 
     public float Energy
@@ -58,15 +62,22 @@ public class PlayerMovement : Movement {
     {
         if (turnButton != string.Empty)
         {
-            float turn = Input.GetAxis(turnButton);
+            if (_forward != Movement.Move.None || !lockTurnWithMove)
+            {
+                float turn = Input.GetAxis(turnButton);
 
-            if (turn > 0)
-            {
-                TurnAround(Movement.Side.Right);
-            }
-            else if (turn < 0)
-            {
-                TurnAround(Movement.Side.Left);
+                if (turn > 0)
+                {
+                    TurnAround(Movement.Side.Right);
+                }
+                else if (turn < 0)
+                {
+                    TurnAround(Movement.Side.Left);
+                }
+                else
+                {
+                    TurnAround(Movement.Side.None);
+                }
             }
             else
             {
@@ -124,15 +135,15 @@ public class PlayerMovement : Movement {
                 SetRun(false);
             }
 
-            if (_run)
+            if (_run && _forward != Movement.Move.None)
             {
                 if (!_controller.isGrounded)
                 {
                     _movementDirection = Vector3.zero;
                     Walk();
                     // Boost keeps momentum while in air if this is uncommented
-                    //_lastDirection.x = _movementDirection.x;
-                    //_lastDirection.z = _movementDirection.z;
+                    _lastDirection.x = _movementDirection.x;
+                    _lastDirection.z = _movementDirection.z;
                     _myCollisionFlags = _controller.Move(_movementDirection * Time.deltaTime);
                 }
 
@@ -141,6 +152,27 @@ public class PlayerMovement : Movement {
                 {
                     _energy = 0;
                     SetRun(false);
+                }
+            }
+            else
+            {
+                if (!_controller.isGrounded)
+                {
+                    float deccel = runSpeed / airDeccelTime;
+
+                    if (Mathf.Abs(_lastDirection.magnitude) > moveSpeed)
+                    {
+                        Vector3 tmp = _lastDirection - _lastDirection.normalized * deccel * Time.deltaTime;
+
+                        if (Vector3.Dot(tmp, _lastDirection) > 0)
+                        {
+                            _lastDirection = tmp;
+                        }
+                        else
+                        {
+                            _lastDirection = _lastDirection.normalized * moveSpeed;
+                        }
+                    }
                 }
             }
         }

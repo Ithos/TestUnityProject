@@ -168,7 +168,6 @@ public class Movement : MonoBehaviour {
 
         if ((_myCollisionFlags & CollisionFlags.CollidedSides) == CollisionFlags.Sides)
         {
-            Debug.Log("Collision");
             _acumLinearVel = 0;
         }
 	}
@@ -328,7 +327,7 @@ public class Movement : MonoBehaviour {
         {
             if (linearDeccelTime != 0 && _acumLinearVel != 0)
             {
-                float deccel = moveSpeed / linearDeccelTime;
+                float deccel = ((Mathf.Abs(_acumLinearVel) < moveSpeed) ? moveSpeed : runSpeed) / linearDeccelTime;
                 float aux = deccel * Time.deltaTime;
 
                 if (_acumLinearVel < 0)
