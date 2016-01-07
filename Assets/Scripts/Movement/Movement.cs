@@ -82,6 +82,11 @@ public class Movement : MonoBehaviour {
 
     private State _state;
 
+    public Vector3 MovementVector
+    {
+        get { return _movementDirection; }
+    }
+
 	public void Awake(){
 		_myTransform = transform;
 		_controller = GetComponent<CharacterController> ();
