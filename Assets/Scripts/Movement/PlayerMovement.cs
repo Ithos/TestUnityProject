@@ -10,21 +10,24 @@ public class PlayerMovement : Movement {
     public string boostButton = string.Empty;
 
     public float energyCostPerSec = 50;
-
+    public float maxEnergy = 100.0f;
     public float airDeccelTime = 0.2f;
 
     public bool lockTurnWithMove = false;
+
+    public GameObject boostParticles;
 
     private float _energy = 0;
 
     public float Energy
     {
-        set { _energy = value; }
+        set { _energy = value; if (_energy > maxEnergy)_energy = maxEnergy; }
         get { return _energy; }
     }
 
 	// Use this for initialization
 	IEnumerator Start () {
+        setParticlesActive(false);
         return base.Start();
 	}
 	
@@ -151,11 +154,16 @@ public class PlayerMovement : Movement {
                 if (_energy < 0)
                 {
                     _energy = 0;
-                    SetRun(false);
+                    SetRun(false);    
                 }
+
+                setParticlesActive(_run);
+                
             }
             else
             {
+                setParticlesActive(false);
+
                 if (!_controller.isGrounded)
                 {
                     float curVel = _lastDirection.magnitude;
@@ -176,6 +184,14 @@ public class PlayerMovement : Movement {
                     }
                 }
             }
+        }
+    }
+
+    private void setParticlesActive(bool active)
+    {
+        if (boostParticles != null)
+        {
+            boostParticles.SetActive(active);
         }
     }
 }

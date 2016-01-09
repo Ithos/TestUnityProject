@@ -47,8 +47,10 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Camera\ThirdPersonCamera.cs" />
+     <Compile Include="Assets\Scripts\EditorGizmos\Gizmo.cs" />
      <Compile Include="Assets\Scripts\Movement\Movement.cs" />
      <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
+     <Compile Include="Assets\Scripts\Objects\EnergyCharger.cs" />
      <Compile Include="Assets\Scripts\Physics\BallPhysics.cs" />
      <Compile Include="Assets\Scripts\Physics\CharacterBallCollision.cs" />
      <None Include="Assets\Shaders\SkyboxBlended.shader" />
