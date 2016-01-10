@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Camera\ThirdPersonCamera.cs" />
+     <Compile Include="Assets\Scripts\Camera\ThirdPersonCameraWithPhysics.cs" />
      <Compile Include="Assets\Scripts\EditorGizmos\Gizmo.cs" />
      <Compile Include="Assets\Scripts\Movement\Movement.cs" />
      <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />

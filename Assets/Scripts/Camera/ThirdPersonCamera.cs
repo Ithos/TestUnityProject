@@ -135,7 +135,7 @@ public class ThirdPersonCamera : MonoBehaviour {
 
 			//Damos la altura de la camara
 			_myTransform.position = new Vector3(_myTransform.position.x, currenHeight,  _myTransform.position.z);
-
+        
 			_x = _myTransform.rotation.x;
 			_y = _myTransform.rotation.y;
 		}
