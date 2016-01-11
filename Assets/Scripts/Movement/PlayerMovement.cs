@@ -16,8 +16,11 @@ public class PlayerMovement : Movement {
     public bool lockTurnWithMove = false;
 
     public GameObject boostParticles;
+    public GameObject playerCamera;
+    public string cameraTag = "MainCamera";
 
     private float _energy = 0;
+    private ThirdPersonCameraWithPhysics _camera;
 
     public float Energy
     {
@@ -27,6 +30,22 @@ public class PlayerMovement : Movement {
 
 	// Use this for initialization
 	IEnumerator Start () {
+        if (playerCamera == null)
+        {
+            playerCamera = GameObject.FindGameObjectWithTag(cameraTag);
+            if (playerCamera != null)
+            {
+                _camera = playerCamera.GetComponent<ThirdPersonCameraWithPhysics>();
+            }
+            else
+            {
+                Debug.LogWarning("No player camera found.");
+            }
+        }
+        else
+        {
+            _camera = playerCamera.GetComponent<ThirdPersonCameraWithPhysics>();
+        }
         setParticlesActive(false);
         return base.Start();
 	}
@@ -189,6 +208,11 @@ public class PlayerMovement : Movement {
 
     private void setParticlesActive(bool active)
     {
+        if (_camera != null)
+        {
+            _camera.setCameraRunningDistance(active);
+        }
+
         if (boostParticles != null)
         {
             boostParticles.SetActive(active);

@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\Camera\ThirdPersonCamera.cs" />
      <Compile Include="Assets\Scripts\Camera\ThirdPersonCameraWithPhysics.cs" />
      <Compile Include="Assets\Scripts\EditorGizmos\Gizmo.cs" />
+     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Scripts\Movement\Movement.cs" />
      <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\Objects\EnergyCharger.cs" />

@@ -10,11 +10,13 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
     public float runDistance;
     public float heigth;
     public string playerTag = "Player";
+    public string lookAtTargetTag = "Enemy";
 
     public bool fixedCamera = false;
 
     public float xSpeed = 250.0f;
     public float ySpeed = 120.0f;
+    public float changePosSpeed = 1.0f;
 
     public string rotateCameraButton = "Rotate_Camera_Button";
     public string rotateCameraHorizontal = "Rotate_Camera_Horizontal_Buttons";
@@ -32,6 +34,8 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
 
     private float _x;
     private float _y;
+    private float _currentDistance;
+    private float _targetDistance;
 
     private bool _mouseButtonDown = false;
 
@@ -42,6 +46,8 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
         _myTransform = transform;
         _x = _myTransform.rotation.x;
         _y = _myTransform.rotation.y;
+        _currentDistance = walkDistance;
+        _targetDistance = walkDistance;
     }
 
     void OnValidate()
@@ -59,10 +65,35 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
     void Start()
     {
         if (target == null)
-            Debug.LogWarning("No target found.");
+        {
+            GameObject tmpGameObj = GameObject.FindGameObjectWithTag(playerTag);
+            if (tmpGameObj != null)
+            {
+                target = tmpGameObj.transform;
+                CameraSetup(false);
+            }
+            else
+            {
+                Debug.LogWarning("No target found.");
+            }
+            
+        }
         else
         {
             CameraSetup(false);
+        }
+
+        if (lookAtTarget == null)
+        {
+            GameObject tmpGameObj = GameObject.FindGameObjectWithTag(lookAtTargetTag);
+            if (tmpGameObj != null)
+            {
+                lookAtTarget = tmpGameObj.transform;
+            }
+            else
+            {
+                Debug.LogWarning("No look_at target found.");
+            }
         }
 
         _cameraCharController = GetComponent<CharacterController>();
@@ -146,14 +177,25 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
             Quaternion currentRotation = Quaternion.Euler(0, currentRotationAngle, 0);
 
             // Damos la posicion de la camara en el plano x-z a los metros que debe estar por detras del objetivo
-            //_myTransform.position = target.position;
-            //_myTransform.position -= currentRotation * Vector3.forward * walkDistance;
+            if (_currentDistance < _targetDistance)
+            {
+                _currentDistance += changePosSpeed * Time.deltaTime;
+
+                if (_currentDistance > _targetDistance)
+                    _currentDistance = _targetDistance;
+            }
+            else if(_currentDistance > _targetDistance)
+            {
+                _currentDistance -= changePosSpeed * Time.deltaTime;
+
+                if (_currentDistance < _targetDistance)
+                    _currentDistance = _targetDistance;
+            }
 
             Vector3 moveVec = target.position;
-            moveVec -= currentRotation * Vector3.forward * walkDistance;
+            moveVec -= currentRotation * Vector3.forward * _currentDistance;
 
             //Damos la altura de la camara
-            //_myTransform.position = new Vector3(_myTransform.position.x, currenHeight,  _myTransform.position.z);
             moveVec = new Vector3(moveVec.x, currenHeight, moveVec.z) - _myTransform.position;
 
             _x = _myTransform.rotation.x;
@@ -176,18 +218,16 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
                 _myTransform.position = new Vector3(_myTransform.position.x, target.position.y - heigth, _myTransform.position.z);
         }
         else
-            _myTransform.position = new Vector3(target.position.x, target.position.y + heigth, target.position.z - walkDistance);
+            _myTransform.position = new Vector3(target.position.x, target.position.y + heigth, target.position.z - _currentDistance);
 
-        //_myTransform.LookAt (target.position);
         _currentLookAtTarget = target;
     }
 
     private void RotateCamera()
     {
-        //y = ClampAngle(y, yMinLimit, yMaxLimit );
 
         Quaternion rotation = Quaternion.Euler(_y, _x, 0);
-        Vector3 position = rotation * (target.up * heigth - target.forward * walkDistance) + target.position;
+        Vector3 position = rotation * (target.up * heigth - target.forward * _currentDistance) + target.position;
 
         _myTransform.rotation = rotation;
         _myTransform.position = position;
@@ -202,6 +242,18 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
         else
         {
             _currentLookAtTarget = target;
+        }
+    }
+
+    public void setCameraRunningDistance(bool running)
+    {
+        if (running)
+        {
+            _targetDistance = runDistance;
+        }
+        else
+        {
+            _targetDistance = walkDistance;
         }
     }
 }
