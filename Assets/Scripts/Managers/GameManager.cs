@@ -43,9 +43,8 @@ public class GameManager : MonoBehaviour {
         Destroy(_ball);
 
         generatePlayers();
-        Transform tmpTransf = blue ? redSpawnPoint : blueSpawnPoint;
+        Transform tmpTransf = blue ? redBallSpawnPoint : blueBallSpawnPoint;
         generateBall(tmpTransf);
-
     }
 
     public void bluePlayerGoal()
@@ -64,7 +63,7 @@ public class GameManager : MonoBehaviour {
     {
         if (bluePlayer != null && blueSpawnPoint != null)
         {
-            _blue = Instantiate(bluePlayer, blueBallSpawnPoint.position, Quaternion.AngleAxis(180.0f, new Vector3(0.0f, 1.0f, 0.0f))) as GameObject;
+            _blue = Instantiate(bluePlayer, blueSpawnPoint.position, Quaternion.AngleAxis(180.0f, new Vector3(0.0f, 1.0f, 0.0f))) as GameObject;
             _blue.name = "Blue_Player";
         }
         else

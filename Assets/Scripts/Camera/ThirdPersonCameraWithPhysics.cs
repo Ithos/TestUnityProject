@@ -141,6 +141,15 @@ public class ThirdPersonCameraWithPhysics : MonoBehaviour
             if (tmp == null)
                 return;
             target = tmp.transform;
+            _currentLookAtTarget = target;
+        }
+
+        if (lookAtTarget == null)
+        {
+            GameObject tmp = GameObject.FindGameObjectWithTag(lookAtTargetTag);
+            if (tmp == null)
+                return;
+            lookAtTarget = tmp.transform;
         }
 
         if (_rotateCameraKeyPressed)

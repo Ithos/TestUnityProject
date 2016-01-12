@@ -130,7 +130,16 @@ public class ThirdPersonCamera : MonoBehaviour {
 			if(tmp == null)
 				return;
 			target = tmp.transform;
+            _currentLookAtTarget = target;
 		}
+
+        if (lookAtTarget == null)
+        {
+            GameObject tmp = GameObject.FindGameObjectWithTag(lookAtTargetTag);
+            if (tmp == null)
+                return;
+            lookAtTarget = tmp.transform;
+        }
 
 		if (_rotateCameraKeyPressed) {
             _x += Input.GetAxis(rotateCameraHorizontal) * xSpeed * 0.02f;
