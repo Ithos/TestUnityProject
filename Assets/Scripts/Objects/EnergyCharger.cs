@@ -66,7 +66,12 @@ public class EnergyCharger : MonoBehaviour {
                 }
                 else
                 {
-                    /// TODO -- Enemy movement -- ///
+                    AIEnemyMovement enem = other.GetComponent<AIEnemyMovement>();
+
+                    if (enem != null)
+                    {
+                        enem.Energy += _acumEnergy;
+                    }
                 }
 
                 particleEffect.SetActive(false);
