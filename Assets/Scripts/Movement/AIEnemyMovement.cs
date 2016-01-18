@@ -6,7 +6,10 @@ public class AIEnemyMovement : Movement {
     public enum EnemyState
     {
         Idle,
-        Search,
+        AvoidRight,
+        AvoidLeft,
+        AvoidBack,
+        AvoidFront,
         Hit,
         Return,
         Launch
@@ -19,6 +22,15 @@ public class AIEnemyMovement : Movement {
     public float hotPointDistance = 0.4f;
     public float redGoalDangerZone = 10.0f;
     public float rotationDamp = 0.15f;
+
+    public float avoidMarginX = 28.5f;
+    public float avoidMarginZ = 48.0f;
+
+    public float forceParameter = 0.1f;
+    public float velocityDivider = 3.0f;
+
+    public Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+    public float ballHeightSearchLimit = 4.0f;
 
     public Transform Ball;
     public Transform BlueGoal;
@@ -77,16 +89,18 @@ public class AIEnemyMovement : Movement {
 
     private void checkState()
     {
-        bool flag = false;
+        if (!checkZMargin() && !checkXMargin())
+        {
+            bool flag = false;
 
-        flag |= checkPlayerBallPosition();
+            flag |= checkPlayerBallPosition();
 
-        if (!flag)
-            flag |= checkDangerZone();
+            if (!flag)
+                flag |= checkDangerZone();
 
-        if (!flag)
-            calculateHotPoint();
-
+            if (!flag)
+                calculateHotPoint();
+        }
     }
 
     private bool checkPlayerBallPosition()
@@ -114,7 +128,7 @@ public class AIEnemyMovement : Movement {
     {
         Vector3 dir = (Ball.position - BlueGoal.position).normalized;
         _hotPoint = Ball.position + hotPointDistance * dir;
-        if (Mathf.Abs(_hotPoint.x) > 29.0f)
+        if (Mathf.Abs(_hotPoint.x) > avoidMarginX)
         {
             _actionState = EnemyState.Hit;
             return;
@@ -122,6 +136,38 @@ public class AIEnemyMovement : Movement {
 
         _actionState = EnemyState.Launch;
 
+    }
+
+    private bool checkXMargin()
+    {
+        if (_myTransform.position.x < -avoidMarginX)
+        {
+            _actionState = EnemyState.AvoidLeft;
+            return true;
+        }
+        else if (_myTransform.position.x > avoidMarginX)
+        {
+            _actionState = EnemyState.AvoidRight;
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool checkZMargin()
+    {
+        if (_myTransform.position.z < -avoidMarginZ )
+        {
+            _actionState = EnemyState.AvoidBack;
+            return true;
+        }
+        else if (_myTransform.position.z > avoidMarginZ)
+        {
+            _actionState = EnemyState.AvoidFront;
+            return true;
+        }
+
+        return false;
     }
 
     private void executeBehaviour()
@@ -136,6 +182,18 @@ public class AIEnemyMovement : Movement {
             break;
             case EnemyState.Launch:
                 launchBall();
+            break;
+            case EnemyState.AvoidLeft:
+                avoidLeft();
+            break;
+            case EnemyState.AvoidRight:
+                avoidRight();
+            break;
+            case EnemyState.AvoidFront:
+                avoidFront();
+            break;
+            case EnemyState.AvoidBack:
+                avoidBack();
             break;
         }
     }
@@ -172,7 +230,8 @@ public class AIEnemyMovement : Movement {
         Vector3 dir = _hotPoint - _myTransform.position;
 
         turnToDirection(dir.normalized);
-        MoveForward(Movement.Move.Forward);
+
+        checkBallHeightAndAdvance();
     }
 
     private void turnToDirection(Vector3 dir)
@@ -207,6 +266,95 @@ public class AIEnemyMovement : Movement {
                 TurnAround(Movement.Side.None);
             }
         }
+    }
+
+    private void avoidRight()
+    {
+        Vector3 myDir = _myTransform.forward;
+
+        float xProj = Vector3.Dot(myDir, new Vector3(1.0f, 0.0f, 0.0f));
+
+        if (xProj > -0.5)
+        {
+            float zProj = Vector3.Dot(myDir, new Vector3(0.0f, 0.0f, 1.0f));
+
+            if (zProj < 0)
+            {
+                TurnAround(Movement.Side.Right);
+            }
+            else
+            {
+                TurnAround(Movement.Side.Left);
+            }
+        }
+
+        checkVelAndAdvance();
+        
+    }
+
+    private void avoidLeft()
+    {
+        Vector3 myDir = _myTransform.forward;
+
+        float xProj = Vector3.Dot(myDir, new Vector3(1.0f, 0.0f, 0.0f));
+
+        if (xProj < 0.5)
+        {
+            float zProj = Vector3.Dot(myDir, new Vector3(0.0f, 0.0f, 1.0f));
+
+            if (zProj < 0)
+            {
+                TurnAround(Movement.Side.Left);
+            }
+            else
+            {
+                TurnAround(Movement.Side.Right);
+            }
+        }
+
+        checkVelAndAdvance();
+    }
+
+    private void avoidBack()
+    {
+
+        goToCenter();
+    }
+
+    private void avoidFront()
+    {
+        goToCenter();
+    }
+
+    private void goToCenter()
+    {
+        Vector3 dir = center - _myTransform.position;
+
+        turnToDirection(dir);
+
+        checkVelAndAdvance();
+    }
+
+    private void checkVelAndAdvance()
+    {
+        if (_acumLinearVel < moveSpeed / velocityDivider)
+            MoveForward(Movement.Move.Forward);
+        else
+            MoveForward(Movement.Move.None);
+    }
+
+    private void checkBallHeightAndAdvance()
+    {
+        float ballDist = (BlueGoal.position - Ball.position).magnitude;
+
+        if (Ball.position.y > ballHeightSearchLimit)
+        {
+            checkVelAndAdvance();
+        }
+        else if (_acumLinearVel < ballDist * forceParameter)
+            MoveForward(Movement.Move.Forward);
+        else
+            MoveForward(Movement.Move.None);
     }
 
     private void checkGameObjects()
