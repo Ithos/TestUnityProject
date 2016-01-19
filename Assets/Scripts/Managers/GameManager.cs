@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        generatePlayers();
+        generatePlayers(0.0f, 0.0f);
         generateBall(neutralBallSpawnPoint);
         
         
@@ -38,11 +38,13 @@ public class GameManager : MonoBehaviour {
 
     private void resetGameAfterGoal( bool blue)
     {
+        float blueEnergy = _blue.GetComponent<PlayerMovement>().Energy;
+        float redEnergy = _red.GetComponent<AIEnemyMovement>().Energy;
         Destroy(_blue);
         Destroy(_red);
         Destroy(_ball);
 
-        generatePlayers();
+        generatePlayers(blueEnergy, redEnergy);
         Transform tmpTransf = blue ? redBallSpawnPoint : blueBallSpawnPoint;
         generateBall(tmpTransf);
     }
@@ -59,12 +61,13 @@ public class GameManager : MonoBehaviour {
         resetGameAfterGoal(false);
     }
 
-    private void generatePlayers()
+    private void generatePlayers(float blueEnergy, float redEnergy)
     {
         if (bluePlayer != null && blueSpawnPoint != null)
         {
             _blue = Instantiate(bluePlayer, blueSpawnPoint.position, Quaternion.AngleAxis(180.0f, new Vector3(0.0f, 1.0f, 0.0f))) as GameObject;
             _blue.name = "Blue_Player";
+            _blue.GetComponent<PlayerMovement>().Energy = blueEnergy;
         }
         else
         {
@@ -75,6 +78,7 @@ public class GameManager : MonoBehaviour {
         {
             _red = Instantiate(redPlayer, redSpawnPoint.position, Quaternion.identity) as GameObject;
             _red.name = "Red_Player";
+            _red.GetComponent<AIEnemyMovement>().Energy = redEnergy;
         }
         else
         {

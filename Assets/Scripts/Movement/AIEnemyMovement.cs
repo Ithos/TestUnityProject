@@ -29,6 +29,10 @@ public class AIEnemyMovement : Movement {
     public float forceParameter = 0.1f;
     public float velocityDivider = 3.0f;
 
+    public float minJumParameter = 1.0f;
+    public float maxJumParameter = 2.0f;
+    public float jumpDistance = 3.0f;
+
     public Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
     public float ballHeightSearchLimit = 4.0f;
 
@@ -62,6 +66,11 @@ public class AIEnemyMovement : Movement {
         {
             hotPointDistance = ballRadius;
         }
+
+        if (minJumParameter > maxJumParameter)
+        {
+            minJumParameter = maxJumParameter;
+        }
     }
 
 	// Use this for initialization
@@ -74,6 +83,7 @@ public class AIEnemyMovement : Movement {
 	
 	// Update is called once per frame
 	void Update () {
+        clearKeyStates();
         checkGameObjects();
         checkState();
         executeBehaviour();
@@ -105,7 +115,7 @@ public class AIEnemyMovement : Movement {
 
     private bool checkPlayerBallPosition()
     {
-        if (Ball.position.z - ballRadius < _myTransform.position.z)
+        if (Ball.position.z - ballRadius < _myTransform.position.z + _controller.radius)
         {
             _actionState = EnemyState.Return;
             return true;
@@ -202,8 +212,8 @@ public class AIEnemyMovement : Movement {
     {
         Vector3 dir1 = RedPoint1.position - _myTransform.position;
         Vector3 dir2 = RedPoint2.position - _myTransform.position;
-        float dist1 = dir1.magnitude;
-        float dist2 = dir2.magnitude;
+        float dist1 = (RedPoint1.position - Ball.position).magnitude;
+        float dist2 = (RedPoint2.position - Ball.position).magnitude;
 
         if (dist1 < dist2)
         {
@@ -223,6 +233,7 @@ public class AIEnemyMovement : Movement {
 
         turnToDirection(dir.normalized);
         MoveForward(Movement.Move.Forward);
+        checkJump();
     }
 
     private void launchBall()
@@ -232,6 +243,7 @@ public class AIEnemyMovement : Movement {
         turnToDirection(dir.normalized);
 
         checkBallHeightAndAdvance();
+        checkJump();
     }
 
     private void turnToDirection(Vector3 dir)
@@ -345,7 +357,9 @@ public class AIEnemyMovement : Movement {
 
     private void checkBallHeightAndAdvance()
     {
-        float ballDist = (BlueGoal.position - Ball.position).magnitude;
+        Vector3 distVec = BlueGoal.position - Ball.position;
+        distVec.y = 0.0f;
+        float ballDist = distVec.magnitude;
 
         if (Ball.position.y > ballHeightSearchLimit)
         {
@@ -355,6 +369,24 @@ public class AIEnemyMovement : Movement {
             MoveForward(Movement.Move.Forward);
         else
             MoveForward(Movement.Move.None);
+    }
+
+    private void checkJump()
+    {
+        Vector3 distVec = Ball.position - _myTransform.position;
+        float  dist = new Vector2(distVec.x, distVec.z).magnitude;
+
+        if (dist <= jumpDistance && dist > ballRadius + _controller.radius &&
+            distVec.y > jumpVelocity * minJumParameter && distVec.y < jumpVelocity * maxJumParameter)
+        {
+            SetJump(true);
+        }
+    }
+
+    private void clearKeyStates()
+    {
+        SetJump(false);
+        SetRun(false);
     }
 
     private void checkGameObjects()

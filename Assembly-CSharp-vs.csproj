@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\Movement\Movement.cs" />
      <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\Objects\BlueGoal.cs" />
+     <Compile Include="Assets\Scripts\Objects\DeathPlaneTrigger.cs" />
      <Compile Include="Assets\Scripts\Objects\EnergyCharger.cs" />
      <Compile Include="Assets\Scripts\Objects\RedGoal.cs" />
      <Compile Include="Assets\Scripts\Physics\BallPhysics.cs" />
