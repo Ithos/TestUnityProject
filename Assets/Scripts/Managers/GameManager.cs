@@ -21,6 +21,16 @@ public class GameManager : MonoBehaviour {
     private int _blueScore = 0;
     private int _redScore = 0;
 
+    public int BlueScore
+    {
+        get { return _blueScore; }
+    }
+
+    public int RedScore
+    {
+        get { return _redScore; }
+    }
+
 
 	// Use this for initialization
 	void Start () {
@@ -33,7 +43,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+       // checkBallsInGame();
 	}
 
     private void resetGameAfterGoal( bool blue)
@@ -97,6 +107,20 @@ public class GameManager : MonoBehaviour {
         else
         {
             Debug.LogError("Ball instantiation error.");
+        }
+    }
+
+    private void checkBallsInGame()
+    {
+        GameObject[] array = GameObject.FindGameObjectsWithTag(_ball.tag);
+        if (array.Length > 2)
+        {
+            for (int i = 0; i < array.Length; ++i)
+            {
+                Destroy(array[i]);
+            }
+
+            generateBall(neutralBallSpawnPoint);
         }
     }
 }

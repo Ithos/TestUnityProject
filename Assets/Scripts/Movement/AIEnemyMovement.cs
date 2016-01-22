@@ -32,6 +32,7 @@ public class AIEnemyMovement : Movement {
     public float minJumParameter = 1.0f;
     public float maxJumParameter = 2.0f;
     public float jumpDistance = 3.0f;
+    public float runDistance = 18.0f;
 
     public Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
     public float ballHeightSearchLimit = 4.0f;
@@ -218,10 +219,12 @@ public class AIEnemyMovement : Movement {
         if (dist1 < dist2)
         {
             turnToDirection(dir1.normalized);
+            checkRun(RedPoint1);
         }
         else
         {
             turnToDirection(dir2.normalized);
+            checkRun(RedPoint2);
         }
 
         MoveForward(Movement.Move.Forward);
@@ -234,6 +237,7 @@ public class AIEnemyMovement : Movement {
         turnToDirection(dir.normalized);
         MoveForward(Movement.Move.Forward);
         checkJump();
+        checkRun(Ball);
     }
 
     private void launchBall()
@@ -244,6 +248,7 @@ public class AIEnemyMovement : Movement {
 
         checkBallHeightAndAdvance();
         checkJump();
+        checkRun(Ball);
     }
 
     private void turnToDirection(Vector3 dir)
@@ -380,6 +385,16 @@ public class AIEnemyMovement : Movement {
             distVec.y > jumpVelocity * minJumParameter && distVec.y < jumpVelocity * maxJumParameter)
         {
             SetJump(true);
+        }
+    }
+
+    private void checkRun(Transform goal)
+    {
+        Vector3 distVec = goal.position - _myTransform.position;
+        float dist = new Vector2(distVec.x, distVec.z).magnitude;
+        if (dist > runDistance)
+        {
+            SetRun(true);
         }
     }
 

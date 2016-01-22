@@ -5,11 +5,11 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{D4FBC9A4-3CD9-27A1-81D3-E604DE5C7339}</ProjectGuid>
+	<ProjectGuid>{884FF1BD-3B0B-51DC-4F6C-00B844634ECB}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
-	<AssemblyName>Assembly-CSharp</AssemblyName>
+	<AssemblyName>Assembly-Boo</AssemblyName>
 	<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
 	<FileAlignment>512</FileAlignment>
 	<BaseDirectory>Assets</BaseDirectory>
@@ -46,20 +46,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\Camera\ThirdPersonCamera.cs" />
-     <Compile Include="Assets\Scripts\Camera\ThirdPersonCameraWithPhysics.cs" />
-     <Compile Include="Assets\Scripts\EditorGizmos\Gizmo.cs" />
-     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
-     <Compile Include="Assets\Scripts\Managers\InGameGUI.cs" />
-     <Compile Include="Assets\Scripts\Movement\AIEnemyMovement.cs" />
-     <Compile Include="Assets\Scripts\Movement\Movement.cs" />
-     <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
-     <Compile Include="Assets\Scripts\Objects\BlueGoal.cs" />
-     <Compile Include="Assets\Scripts\Objects\DeathPlaneTrigger.cs" />
-     <Compile Include="Assets\Scripts\Objects\EnergyCharger.cs" />
-     <Compile Include="Assets\Scripts\Objects\RedGoal.cs" />
-     <Compile Include="Assets\Scripts\Physics\BallPhysics.cs" />
-     <Compile Include="Assets\Scripts\Physics\CharacterBallCollision.cs" />
+     <Compile Include="Assets\Scripts\Managers\NewBehaviourScript.boo" />
      <None Include="Assets\Shaders\SkyboxBlended.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
