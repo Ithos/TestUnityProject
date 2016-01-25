@@ -51,6 +51,7 @@
      <Compile Include="Assets\Scripts\EditorGizmos\Gizmo.cs" />
      <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
      <Compile Include="Assets\Scripts\Managers\InGameGUI.cs" />
+     <Compile Include="Assets\Scripts\Managers\MenuManager.cs" />
      <Compile Include="Assets\Scripts\Movement\AIEnemyMovement.cs" />
      <Compile Include="Assets\Scripts\Movement\Movement.cs" />
      <Compile Include="Assets\Scripts\Movement\PlayerMovement.cs" />
