@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MenuManager : MonoBehaviour {
+public class OnClickLoadScene : MonoBehaviour {
 
-    public GameObject[] buttonList;
-    public string[] tagList;
+    public string sceneName = "";
 
 	// Use this for initialization
 	void Start () {
@@ -15,4 +14,9 @@ public class MenuManager : MonoBehaviour {
 	void Update () {
 	
 	}
+
+    public void OnMouseUp()
+    {
+        Application.LoadLevel(sceneName);
+    }
 }
