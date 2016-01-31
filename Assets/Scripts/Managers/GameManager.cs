@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour {
     public Transform blueBallSpawnPoint;
     public Transform redBallSpawnPoint;
 
+    public float maxX = 100.0f;
+    public float maxY = 100.0f;
+    public float maxZ = 500.0f;
+
     private GameObject _blue;
     private GameObject _red;
     private GameObject _ball;
@@ -43,7 +47,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-       // checkBallsInGame();
+       checkBallsInGame();
 	}
 
     private void resetGameAfterGoal( bool blue)
@@ -128,6 +132,17 @@ public class GameManager : MonoBehaviour {
                 Destroy(array[i]);
             }
 
+            generateBall(neutralBallSpawnPoint);
+        }
+    }
+
+    private void checkMaxCoord()
+    {
+        Transform trans = _ball.transform;
+
+        if (Mathf.Abs(trans.position.x) > maxX || Mathf.Abs(trans.position.y) > maxY || Mathf.Abs(trans.position.z) > maxZ)
+        {
+            Destroy(_ball);
             generateBall(neutralBallSpawnPoint);
         }
     }
