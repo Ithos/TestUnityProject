@@ -88,7 +88,15 @@ public class GameManager : MonoBehaviour {
         {
             _red = Instantiate(redPlayer, redSpawnPoint.position, Quaternion.identity) as GameObject;
             _red.name = "Red_Player";
-            _red.GetComponent<AIEnemyMovement>().Energy = redEnergy;
+            AIEnemyMovement ai = _red.GetComponent<AIEnemyMovement>();
+            if (ai != null)
+            {
+                ai.Energy = redEnergy;
+            }
+            else
+            {
+                _red.GetComponent<PlayerMovement>().Energy = redEnergy;
+            }
         }
         else
         {
