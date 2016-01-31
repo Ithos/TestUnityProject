@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
        checkBallsInGame();
+       checkMaxCoord();
 	}
 
     private void resetGameAfterGoal( bool blue)
