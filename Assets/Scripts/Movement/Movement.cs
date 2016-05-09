@@ -188,17 +188,17 @@ public class Movement : MonoBehaviour {
 
     private void Setup()
     {
-        animation.Stop(); // Paramos cualquier animación que pudiera estar ejecutandose 
-        animation.wrapMode = WrapMode.Loop;
+        GetComponent<Animation>().Stop(); // Paramos cualquier animación que pudiera estar ejecutandose 
+        GetComponent<Animation>().wrapMode = WrapMode.Loop;
 
         if (jumpAnimation != null)
         {
-            animation[jumpAnimation.name].layer = 1; //Aumentamos el delay en la ejecución de la animación
-            animation[jumpAnimation.name].wrapMode = WrapMode.Once;
+            GetComponent<Animation>()[jumpAnimation.name].layer = 1; //Aumentamos el delay en la ejecución de la animación
+            GetComponent<Animation>()[jumpAnimation.name].wrapMode = WrapMode.Once;
         }
 
         if (idleAnimation != null)
-            animation.Play(idleAnimation.name);
+            GetComponent<Animation>().Play(idleAnimation.name);
 
         _movementDirection = Vector3.zero;
         _lastDirection = Vector3.zero;
@@ -223,7 +223,7 @@ public class Movement : MonoBehaviour {
         {
             _myTransform.Rotate(0, horiz * Time.deltaTime * rotateSpeed, 0);
             if (turnAnimation != null)
-                animation.CrossFade(turnAnimation.name);
+                GetComponent<Animation>().CrossFade(turnAnimation.name);
 
             if (_acumLinearVel != 0)
                 return false;
@@ -252,7 +252,7 @@ public class Movement : MonoBehaviour {
                 speed = runSpeed;
                 if (!checkSwimming(runSwimAnimation) && runAnimation != null)
                 {
-                    animation.CrossFade(runAnimation.name);
+                    GetComponent<Animation>().CrossFade(runAnimation.name);
                 }
             }
             else
@@ -262,7 +262,7 @@ public class Movement : MonoBehaviour {
 
                 speed = moveSpeed;
                 if(!checkSwimming(swimAnimation) && walkAnimation != null)
-                    animation.CrossFade(walkAnimation.name);
+                    GetComponent<Animation>().CrossFade(walkAnimation.name);
             }
 
             if (linearAccelTime != 0)
@@ -297,7 +297,7 @@ public class Movement : MonoBehaviour {
 
             _movementDirection += auxVec;
             if (!checkSwimming(swimAnimation) && strafeAnimation != null)
-                animation.CrossFade(strafeAnimation.name);
+                GetComponent<Animation>().CrossFade(strafeAnimation.name);
             return true;
         }
 
@@ -312,7 +312,7 @@ public class Movement : MonoBehaviour {
         {
             _verticalVelocity = jumpVelocity;
             if(jumpAnimation != null)
-                animation.CrossFade(jumpAnimation.name);
+                GetComponent<Animation>().CrossFade(jumpAnimation.name);
             _jumping = JumpState.Jumping;
             return true;
         }
@@ -323,7 +323,7 @@ public class Movement : MonoBehaviour {
     protected void Fall()
     {
         if(fallAnimation != null)
-            animation.CrossFade(fallAnimation.name);
+            GetComponent<Animation>().CrossFade(fallAnimation.name);
     }
 
     protected void Idle()
@@ -351,13 +351,13 @@ public class Movement : MonoBehaviour {
                 _movementDirection += _myTransform.forward * _acumLinearVel;
 
                 if (brakingAnimation != null)
-                    animation.CrossFade(brakingAnimation.name);
+                    GetComponent<Animation>().CrossFade(brakingAnimation.name);
 
                 return;
             }
 
             if(idleAnimation != null)
-                animation.CrossFade(idleAnimation.name);
+                GetComponent<Animation>().CrossFade(idleAnimation.name);
         }
     }
 
@@ -379,7 +379,7 @@ public class Movement : MonoBehaviour {
     {
         if (_swimming && anim != null)
         {
-            animation.CrossFade(anim.name);
+            GetComponent<Animation>().CrossFade(anim.name);
             return true;
         }
 

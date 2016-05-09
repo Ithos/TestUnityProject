@@ -16,7 +16,7 @@ public class MouseOverHighlight : MonoBehaviour {
         {
             for (int i = 0; i < objectParts.Length; ++i)
             {
-                _defaulColors[i] = objectParts[i].renderer.material.GetColor("_Color");
+                _defaulColors[i] = objectParts[i].GetComponent<Renderer>().material.GetColor("_Color");
             }
         }
 	}
@@ -40,11 +40,11 @@ public class MouseOverHighlight : MonoBehaviour {
             {
                 if (glow)
                 {
-                    objectParts[i].renderer.material.SetColor("_Color", highlightColor);
+                    objectParts[i].GetComponent<Renderer>().material.SetColor("_Color", highlightColor);
                 }
                 else
                 {
-                    objectParts[i].renderer.material.SetColor("_Color", _defaulColors[i]);
+                    objectParts[i].GetComponent<Renderer>().material.SetColor("_Color", _defaulColors[i]);
                 }
 
             }
